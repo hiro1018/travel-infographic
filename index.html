@@ -323,7 +323,7 @@
             let chatHistory = [];
             chatHistory.push({ role: "user", parts: [{ text: prompt }] });
             const payload = { contents: chatHistory };
-            const apiKey = "AIzaSyBGuxwuo8zXfkSy7sdVTRxItYbr9Wk6gx8"; // If you want to use models other than gemini-2.5-flash-preview-05-20 or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.
+            const apiKey = "AIzaSyCTdz8yatZc3_Mar-YIeqocYa1n7htmibo"; // If you want to use models other than gemini-2.5-flash-preview-05-20 or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
             let retryCount = 0;
@@ -393,5 +393,6 @@
     </script>
 </body>
 </html>
+
 
 
