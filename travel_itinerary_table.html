@@ -11,63 +11,104 @@
     <style>
         body {
             font-family: 'Inter', 'Noto Sans JP', sans-serif;
-            background-color: #f0f4f8;
-            color: #333;
+            background-color: #FDF8F5; /* 暖色系の背景 */
+            color: #333333; /* 濃い文字色 */
         }
         .container {
-            max-width: 1000px; /* 少し広めに設定 */
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
         }
         h1 {
             font-size: 2.5rem;
             font-weight: 700;
-            color: #073B4C;
+            color: #8B5F4D; /* 暖色系のヘッダー */
             text-align: center;
             margin-bottom: 1.5rem;
         }
         h3 {
             font-size: 1.75rem;
             font-weight: 700;
-            color: #118AB2;
+            color: #A87C6D; /* 暖色系のサブヘッダー */
             margin-top: 2.5rem;
             margin-bottom: 1rem;
-            border-bottom: 2px solid #E0E7FF;
+            border-bottom: 2px solid #E5E7EB; /* 落ち着いた区切り線 */
             padding-bottom: 0.5rem;
         }
+
+        /* レスポンシブテーブルのスタイル */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             border-radius: 8px;
-            overflow: hidden; /* 角丸を適用するため */
+            overflow: hidden;
         }
         th, td {
             padding: 0.75rem;
-            border: 1px solid #E2E8F0;
+            border: 1px solid #E5E7EB; /* 落ち着いたボーダー */
             text-align: left;
             vertical-align: top;
+            white-space: normal; /* テキストの折り返しを許可 */
         }
         th {
-            background-color: #F8FAFC;
+            background-color: #F9F5F3; /* 暖色系のテーブルヘッダー背景 */
             font-weight: 600;
-            color: #475569;
+            color: #6B7280; /* 落ち着いたヘッダー文字色 */
         }
         tr:nth-child(even) {
-            background-color: #F8FAFC;
+            background-color: #FDF8F5; /* 偶数行の背景 */
         }
         tr:hover {
-            background-color: #E2E8F0;
+            background-color: #F0EBE8; /* ホバー時の背景 */
         }
+
+        /* スマートフォン向けテーブル変換 (767px以下) */
+        @media (max-width: 767px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+                border: none !important; /* スマホではボーダーを削除 */
+            }
+            thead {
+                display: none; /* ヘッダー行を非表示 */
+            }
+            tr {
+                margin-bottom: 1rem;
+                border: 1px solid #E5E7EB; /* 行をカードのように見せるボーダー */
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            }
+            td {
+                text-align: right; /* 値を右寄せ */
+                padding-left: 50%; /* ラベル分のスペースを確保 */
+                position: relative;
+                border-bottom: 1px solid #E5E7EB; /* セル間の区切り線 */
+            }
+            td:last-child {
+                border-bottom: none; /* 最後のセルの下線は不要 */
+            }
+            td::before {
+                content: attr(data-label); /* data-label属性の値をラベルとして表示 */
+                position: absolute;
+                left: 0;
+                width: 45%;
+                padding-left: 0.75rem;
+                font-weight: 600;
+                text-align: left; /* ラベルを左寄せ */
+                color: #6B7280; /* ラベルの色 */
+            }
+        }
+
         .link-back {
             text-align: center;
             margin-bottom: 1.5rem;
             padding-top: 1rem;
         }
         .hint-box {
-            background-color: #E0F2F7; /* Light Blue */
-            border-left: 5px solid #00BCD4; /* Material Cyan */
+            background-color: #F9F5F3; /* 暖色系のヒントボックス背景 */
+            border-left: 5px solid #A87C6D; /* 暖色系のヒントボックスボーダー */
             padding: 1rem;
             border-radius: 0.5rem;
             margin-top: 2rem;
@@ -75,7 +116,7 @@
         }
         .hint-box h4 {
             font-weight: 700;
-            color: #00796B; /* Darker Cyan */
+            color: #8B5F4D; /* 暖色系のヒントボックスタイトル */
             margin-bottom: 0.5rem;
         }
         .emoji {
@@ -106,74 +147,74 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>3:00</td>
-                    <td>大阪出発 <span class="emoji">🚗</span></td>
-                    <td>大阪</td>
-                    <td>車（高速）</td>
-                    <td>未明出発。安全運転で！</td>
+                    <td data-label="時間">3:00</td>
+                    <td data-label="予定">大阪出発 <span class="emoji">🚗</span></td>
+                    <td data-label="場所">大阪</td>
+                    <td data-label="交通手段">車（高速）</td>
+                    <td data-label="メモ">未明出発。安全運転で！</td>
                 </tr>
                 <tr>
-                    <td>5:30-6:00</td>
-                    <td><strong>静岡県スタンプ</strong>獲得 <span class="emoji">📍</span></td>
-                    <td>東名高速道路 牧之原SA (上り) など</td>
-                    <td>車</td>
-                    <td>最初のスタンプをゲット！</td>
+                    <td data-label="時間">5:30-6:00</td>
+                    <td data-label="予定"><strong>静岡県スタンプ</strong>獲得 <span class="emoji">📍</span></td>
+                    <td data-label="場所">東名高速道路 牧之原SA (上り) など</td>
+                    <td data-label="交通手段">車</td>
+                    <td data-label="メモ">最初のスタンプをゲット！</td>
                 </tr>
                 <tr>
-                    <td>7:30-8:30</td>
-                    <td><strong>山梨県スタンプ</strong>獲得 <span class="emoji">📍</span></td>
-                    <td>道の駅「富士吉田」</td>
-                    <td>車</td>
-                    <td>御殿場ICからすぐ。休憩＆軽食もどうぞ。</td>
+                    <td data-label="時間">7:30-8:30</td>
+                    <td data-label="予定"><strong>山梨県スタンプ</strong>獲得 <span class="emoji">📍</span></td>
+                    <td data-label="場所">道の駅「富士吉田」</td>
+                    <td data-label="交通手段">車</td>
+                    <td data-label="メモ">御殿場ICからすぐ。休憩＆軽食もどうぞ。</td>
                 </tr>
                 <tr>
-                    <td>10:00-11:30</td>
-                    <td><strong>江の島＆ドラマロケ地巡礼</strong> <span class="emoji">🌊⛩️</span></td>
-                    <td>神奈川県藤沢市</td>
-                    <td>車</td>
-                    <td>「最後から二番目の恋」の舞台を巡りながら、江の島散策を楽しんで！</td>
+                    <td data-label="時間">10:00-11:30</td>
+                    <td data-label="予定"><strong>江の島＆ドラマロケ地巡礼</strong> <span class="emoji">�⛩️</span></td>
+                    <td data-label="場所">神奈川県藤沢市</td>
+                    <td data-label="交通手段">車</td>
+                    <td data-label="メモ">「最後から二番目の恋」の舞台を巡りながら、江の島散策を楽しんで！</td>
                 </tr>
                 <tr>
-                    <td>11:30-13:00</td>
-                    <td><strong>江ノ電に乗って鎌倉へ</strong> <span class="emoji">🚃</span></td>
-                    <td>江の島駅 〜 鎌倉駅</td>
-                    <td>江ノ電</td>
-                    <td>ドラマにも登場する江ノ電に乗って、景色を満喫。</td>
+                    <td data-label="時間">11:30-13:00</td>
+                    <td data-label="予定"><strong>江ノ電に乗って鎌倉へ</strong> <span class="emoji">🚃</span></td>
+                    <td data-label="場所">江の島駅 〜 鎌倉駅</td>
+                    <td data-label="交通手段">江ノ電</td>
+                    <td data-label="メモ">ドラマにも登場する江ノ電に乗って、景色を満喫。</td>
                 </tr>
                 <tr>
-                    <td>13:00-15:00</td>
-                    <td><strong>鎌倉小町通り観光＆ランチ</strong> <span class="emoji">🛍️🍜</span></td>
-                    <td>鎌倉 (鶴岡八幡宮周辺)</td>
-                    <td>徒歩</td>
-                    <td>小町通りで食べ歩きやお土産探し、ランチをどうぞ。</td>
+                    <td data-label="時間">13:00-15:00</td>
+                    <td data-label="予定"><strong>鎌倉小町通り観光＆ランチ</strong> <span class="emoji">🛍️🍜</span></td>
+                    <td data-label="場所">鎌倉 (鶴岡八幡宮周辺)</td>
+                    <td data-label="交通手段">徒歩</td>
+                    <td data-label="メモ">小町通りで食べ歩きやお土産探し、ランチをどうぞ。</td>
                 </tr>
                 <tr>
-                    <td>15:30</td>
-                    <td>鎌倉から横浜へ移動 <span class="emoji">🚗</span></td>
-                    <td>神奈川県鎌倉市 → 神奈川県横浜市</td>
-                    <td>車（高速）</td>
-                    <td></td>
+                    <td data-label="時間">15:30</td>
+                    <td data-label="予定">鎌倉から横浜へ移動 <span class="emoji">🚗</span></td>
+                    <td data-label="場所">神奈川県鎌倉市 → 神奈川県横浜市</td>
+                    <td data-label="交通手段">車（高速）</td>
+                    <td data-label="メモ"></td>
                 </tr>
                 <tr>
-                    <td>18:00</td>
-                    <td>ホテルチェックイン <span class="emoji">🏨</span></td>
-                    <td><strong>HOTEL ZALA (新横浜駅近く)</strong><br>〒222-0033 神奈川県横浜市港北区新横浜1-27-9<br>TEL: 045-474-5433</td>
-                    <td>車</td>
-                    <td>長旅お疲れ様でした！ゆっくりお過ごしください。</td>
+                    <td data-label="時間">18:00</td>
+                    <td data-label="予定">ホテルチェックイン <span class="emoji">🏨</span></td>
+                    <td data-label="場所"><strong>HOTEL ZALA (新横浜駅近く)</strong><br>〒222-0033 神奈川県横浜市港北区新横浜1-27-9<br>TEL: 045-474-5433</td>
+                    <td data-label="交通手段">車</td>
+                    <td data-label="メモ">長旅お疲れ様でした！ゆっくりお過ごしください。</td>
                 </tr>
                 <tr>
-                    <td>19:00</td>
-                    <td>晩御飯 <span class="emoji">🍜</span></td>
-                    <td>ホテル周辺</td>
-                    <td>徒歩</td>
-                    <td></td>
+                    <td data-label="時間">19:00</td>
+                    <td data-label="予定">晩御飯 <span class="emoji">🍜</span></td>
+                    <td data-label="場所">ホテル周辺</td>
+                    <td data-label="交通手段">徒歩</td>
+                    <td data-label="メモ"></td>
                 </tr>
                 <tr>
-                    <td>21:00</td>
-                    <td>自由時間、就寝 <span class="emoji">😴</span></td>
-                    <td>ホテル</td>
-                    <td>滞在</td>
-                    <td></td>
+                    <td data-label="時間">21:00</td>
+                    <td data-label="予定">自由時間、就寝 <span class="emoji">😴</span></td>
+                    <td data-label="場所">ホテル</td>
+                    <td data-label="交通手段">滞在</td>
+                    <td data-label="メモ"></td>
                 </tr>
             </tbody>
         </table>
@@ -191,53 +232,53 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>8:00</td>
-                    <td>ホテル出発 <span class="emoji">🚗</span></td>
-                    <td>HOTEL ZALA</td>
-                    <td>車（高速）</td>
-                    <td></td>
+                    <td data-label="時間">8:00</td>
+                    <td data-label="予定">ホテル出発 <span class="emoji">🚗</span></td>
+                    <td data-label="場所">HOTEL ZALA</td>
+                    <td data-label="交通手段">車（高速）</td>
+                    <td data-label="メモ"></td>
                 </tr>
                 <tr>
-                    <td>10:00-12:00</td>
-                    <td><strong>那珂湊おさかな市場観光</strong> <span class="emoji">🐟</span></td>
-                    <td>茨城県ひたちなか市</td>
-                    <td>車</td>
-                    <td>営業時間: 8:30〜16:00。新鮮な海の幸を堪能！<strong>茨城県スタンプ</strong>も探してみて。</td>
+                    <td data-label="時間">10:00-12:00</td>
+                    <td data-label="予定"><strong>那珂湊おさかな市場観光</strong> <span class="emoji">🐟</span></td>
+                    <td data-label="場所">茨城県ひたちなか市</td>
+                    <td data-label="交通手段">車</td>
+                    <td data-label="メモ">営業時間: 8:30〜16:00。新鮮な海の幸を堪能！<strong>茨城県スタンプ</strong>も探してみて。</td>
                 </tr>
                 <tr>
-                    <td>13:30-15:00</td>
-                    <td><strong>大谷資料館観光</strong> <span class="emoji">🗿</span></td>
-                    <td>栃木県宇都宮市</td>
-                    <td>車</td>
-                    <td>地底の神秘的な空間へ。<strong>栃木県スタンプ</strong>は周辺の道の駅などで確認を。</td>
+                    <td data-label="時間">13:30-15:00</td>
+                    <td data-label="予定"><strong>大谷資料館観光</strong> <span class="emoji">🗿</span></td>
+                    <td data-label="場所">栃木県宇都宮市</td>
+                    <td data-label="交通手段">車</td>
+                    <td data-label="メモ">地底の神秘的な空間へ。<strong>栃木県スタンプ</strong>は周辺の道の駅などで確認を。</td>
                 </tr>
                 <tr>
-                    <td>15:30-17:00</td>
-                    <td><strong>日光東照宮観光</strong> <span class="emoji">⛩️</span></td>
-                    <td>栃木県日光市</td>
-                    <td>車</td>
-                    <td>世界遺産の荘厳な雰囲気を味わいましょう。</td>
+                    <td data-label="時間">15:30-17:00</td>
+                    <td data-label="予定"><strong>日光東照宮観光</strong> <span class="emoji">⛩️</span></td>
+                    <td data-label="場所">栃木県日光市</td>
+                    <td data-label="交通手段">車</td>
+                    <td data-label="メモ">世界遺産の荘厳な雰囲気を味わいましょう。</td>
                 </tr>
                 <tr>
-                    <td>18:00</td>
-                    <td>ホテルチェックイン <span class="emoji">🏨</span></td>
-                    <td><strong>亀の井ホテル 日光湯西川</strong><br>〒321-2601 栃木県日光市湯西川1033<br>TEL: 0288-98-0016</td>
-                    <td>車</td>
-                    <td>温泉で旅の疲れを癒してくださいね。</td>
+                    <td data-label="時間">18:00</td>
+                    <td data-label="予定">ホテルチェックイン <span class="emoji">🏨</span></td>
+                    <td data-label="場所"><strong>亀の井ホテル 日光湯西川</strong><br>〒321-2601 栃木県日光市湯西川1033<br>TEL: 0288-98-0016</td>
+                    <td data-label="交通手段">車</td>
+                    <td data-label="メモ">温泉で旅の疲れを癒してくださいね。</td>
                 </tr>
                 <tr>
-                    <td>19:00</td>
-                    <td>晩御飯 <span class="emoji">🍜</span></td>
-                    <td>ホテル</td>
-                    <td>滞在</td>
-                    <td></td>
+                    <td data-label="時間">19:00</td>
+                    <td data-label="予定">晩御飯 <span class="emoji">🍜</span></td>
+                    <td data-label="場所">ホテル</td>
+                    <td data-label="交通手段">滞在</td>
+                    <td data-label="メモ"></td>
                 </tr>
                 <tr>
-                    <td>21:00</td>
-                    <td>自由時間、就寝 <span class="emoji">😴</span></td>
-                    <td>ホテル</td>
-                    <td>滞在</td>
-                    <td></td>
+                    <td data-label="時間">21:00</td>
+                    <td data-label="予定">自由時間、就寝 <span class="emoji">😴</span></td>
+                    <td data-label="場所">ホテル</td>
+                    <td data-label="交通手段">滞在</td>
+                    <td data-label="メモ"></td>
                 </tr>
             </tbody>
         </table>
@@ -255,46 +296,46 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>9:00</td>
-                    <td>ホテル出発 <span class="emoji">🚗</span></td>
-                    <td>亀の井ホテル 日光湯西川</td>
-                    <td>車（高速）</td>
-                    <td></td>
+                    <td data-label="時間">9:00</td>
+                    <td data-label="予定">ホテル出発 <span class="emoji">🚗</span></td>
+                    <td data-label="場所">亀の井ホテル 日光湯西川</td>
+                    <td data-label="交通手段">車（高速）</td>
+                    <td data-label="メモ"></td>
                 </tr>
                 <tr>
-                    <td>11:00-13:00</td>
-                    <td><strong>草津温泉観光</strong> <span class="emoji">♨️</span></td>
-                    <td>群馬県吾妻郡草津町</td>
-                    <td>車</td>
-                    <td>日本三名泉の一つ、湯畑の迫力は必見！<strong>群馬県スタンプ</strong>も忘れずに。</td>
+                    <td data-label="時間">11:00-13:00</td>
+                    <td data-label="予定"><strong>草津温泉観光</strong> <span class="emoji">♨️</span></td>
+                    <td data-label="場所">群馬県吾妻郡草津町</td>
+                    <td data-label="交通手段">車</td>
+                    <td data-label="メモ">日本三名泉の一つ、湯畑の迫力は必見！<strong>群馬県スタンプ</strong>も忘れずに。</td>
                 </tr>
                 <tr>
-                    <td>14:00-14:30</td>
-                    <td><strong>埼玉県スタンプ</strong>獲得 <span class="emoji">📍</span></td>
-                    <td>関越自動車道 上里SA (上り)</td>
-                    <td>車</td>
-                    <td>高崎へ向かう途中で立ち寄ります。</td>
+                    <td data-label="時間">14:00-14:30</td>
+                    <td data-label="予定"><strong>埼玉県スタンプ</strong>獲得 <span class="emoji">📍</span></td>
+                    <td data-label="場所">関越自動車道 上里SA (上り)</td>
+                    <td data-label="交通手段">車</td>
+                    <td data-label="メモ">高崎へ向かう途中で立ち寄ります。</td>
                 </tr>
                 <tr>
-                    <td>15:00</td>
-                    <td>高崎市へ移動 <span class="emoji">🚗</span></td>
-                    <td>群馬県高崎市</td>
-                    <td>車</td>
-                    <td></td>
+                    <td data-label="時間">15:00</td>
+                    <td data-label="予定">高崎市へ移動 <span class="emoji">🚗</span></td>
+                    <td data-label="場所">群馬県高崎市</td>
+                    <td data-label="交通手段">車</td>
+                    <td data-label="メモ"></td>
                 </tr>
                 <tr>
-                    <td>16:00</td>
-                    <td>ホテルチェックイン <span class="emoji">🏨</span></td>
-                    <td><strong>ホテルルートイン高崎駅西口</strong><br>〒370-0052 群馬県高崎市旭町128-4<br>TEL: 027-327-1011</td>
-                    <td>車</td>
-                    <td>高崎での夜をお楽しみください。</td>
+                    <td data-label="時間">16:00</td>
+                    <td data-label="予定">ホテルチェックイン <span class="emoji">🏨</span></td>
+                    <td data-label="場所"><strong>ホテルルートイン高崎駅西口</strong><br>〒370-0052 群馬県高崎市旭町128-4<br>TEL: 027-327-1011</td>
+                    <td data-label="交通手段">車</td>
+                    <td data-label="メモ">高崎での夜をお楽しみください。</td>
                 </tr>
                 <tr>
-                    <td>19:00</td>
-                    <td>晩御飯 <span class="emoji">🍜</span></td>
-                    <td>高崎市内</td>
-                    <td>徒歩/車</td>
-                    <td><strong>候補:</strong> 峠の釜めし おぎのや、高崎パスタ (ボンジョルノ、はらっぱ、シャンゴ、バンビーナ)、水沢うどん</td>
+                    <td data-label="時間">19:00</td>
+                    <td data-label="予定">晩御飯 <span class="emoji">🍜</span></td>
+                    <td data-label="場所">高崎市内</td>
+                    <td data-label="交通手段">徒歩/車</td>
+                    <td data-label="メモ"><strong>候補:</strong> 峠の釜めし おぎのや、高崎パスタ (ボンジョルノ、はらっぱ、シャンゴ、バンビーナ)、水沢うどん</td>
                 </tr>
             </tbody>
         </table>
@@ -312,18 +353,18 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>8:00</td>
-                    <td>ホテル出発 <span class="emoji">🚗</span></td>
-                    <td>ホテルルートイン高崎駅西口</td>
-                    <td>車（高速）</td>
-                    <td></td>
+                    <td data-label="時間">8:00</td>
+                    <td data-label="予定">ホテル出発 <span class="emoji">🚗</span></td>
+                    <td data-label="場所">ホテルルートイン高崎駅西口</td>
+                    <td data-label="交通手段">車（高速）</td>
+                    <td data-label="メモ"></td>
                 </tr>
                 <tr>
-                    <td>終日</td>
-                    <td>大阪へ帰宅 <span class="emoji">🏠</span></td>
-                    <td>長野経由、中央自動車道利用</td>
-                    <td>車（高速）</td>
-                    <td>長距離運転なので、適宜休憩を挟んでくださいね。</td>
+                    <td data-label="時間">終日</td>
+                    <td data-label="予定">大阪へ帰宅 <span class="emoji">🏠</span></td>
+                    <td data-label="場所">長野経由、中央自動車道利用</td>
+                    <td data-label="交通手段">車（高速）</td>
+                    <td data-label="メモ">長距離運転なので、適宜休憩を挟んでくださいね。</td>
                 </tr>
             </tbody>
         </table>
@@ -340,4 +381,4 @@
     </div>
 </body>
 </html>
-
+�
