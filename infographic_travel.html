@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Chosen Palette: Vibrant Road Trip -->
+    <!-- Application Structure Plan: The SPA is designed as a top-to-bottom narrative infographic. It starts with a hero section and high-level stats for an immediate overview. A visual route flow follows to orient the user. The main content is a grid of daily cards, each summarizing the day's theme and presenting data with a specific chart (donut, bar, timeline) to best fit the information. It concludes with an overall trip summary chart. This chronological, summary-to-detail structure makes the journey's story easy to follow and digest. -->
+    <!-- Visualization & Content Choices: 
+        - Trip Stats (KPIs): Goal: Inform. Method: Large numbers in cards. Justification: High-impact, quick understanding.
+        - Route Flow: Goal: Organize. Method: Styled HTML/CSS flexbox diagram. Justification: Shows trip progression clearly without complex maps, adhering to NO SVG/Mermaid rule.
+        - Day 1 Activities: Goal: Compare. Method: Chart.js Donut Chart. Justification: Shows part-to-whole relationship of time spent on different activities.
+        - Day 2 Sightseeing: Goal: Compare. Method: Chart.js Bar Chart. Justification: Compares time spent at discrete locations effectively.
+        - Day 3 Timeline: Goal: Organize/Change. Method: Styled HTML/CSS timeline. Justification: Clearly shows the sequence of events for the day.
+        - Total Trip Breakdown: Goal: Compare. Method: Chart.js Pie Chart. Justification: Summarizes the composition of the entire trip's activities.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <title>3泊4日 関東スタンプラリーの旅 インフォグラフィック</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 200px; /* A4横向きに合わせるため高さを調整 */
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 250px; /* A4横向きに合わせるため高さを調整 */
+            }
+        }
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #118AB2;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: none; /* 初期状態では非表示 */
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto p-2 md:p-4">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-[#073B4C] mb-1">🌸 3泊4日 関東スタンプラリーの旅 🌸</h1>
+            <p class="text-base text-[#118AB2]">スタンプ集めのワクワクと、ドラマの舞台を巡る感動を詰め込んだ特別な旅の記録</p>
+        </header>
+
+        <section class="mb-8">
+            <h2 class="text-xl font-bold text-center text-[#073B4C] mb-4">旅のハイライト</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-[#EF476F]">
+                    <p class="text-4xl font-bold text-[#EF476F]">6</p>
+                    <p class="text-base text-slate-600 mt-1">都道府県スタンプ</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-[#FFD166]">
+                    <p class="text-4xl font-bold text-[#FFD166]">~1300<span class="text-xl">km</span></p>
+                    <p class="text-base text-slate-600 mt-1">総走行距離 (推定)</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-[#06D6A0]">
+                    <p class="text-4xl font-bold text-[#06D6A0]">4<span class="text-xl">日間</span></p>
+                    <p class="text-base text-slate-600 mt-1">冒険の日々</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-8">
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold text-center text-[#073B4C] mb-4">旅のルートフロー</h2>
+                <div class="flex flex-wrap items-center justify-center gap-1 md:gap-2 text-xs md:text-sm">
+                    <span class="font-bold bg-[#118AB2] text-white py-1 px-2 rounded-full">大阪</span>
+                    <span class="text-slate-400 font-bold">→</span>
+                    <span class="bg-slate-200 py-0.5 px-1.5 rounded-md">静岡</span>
+                    <span class="text-slate-400 font-bold">→</span>
+                    <span class="bg-slate-200 py-0.5 px-1.5 rounded-md">山梨</span>
+                    <span class="text-slate-400 font-bold">→</span>
+                    <span class="bg-slate-200 py-0.5 px-1.5 rounded-md">神奈川</span>
+                    <span class="text-slate-400 font-bold">→</span>
+                    <span class="bg-slate-200 py-0.5 px-1.5 rounded-md">茨城</span>
+                    <span class="text-slate-400 font-bold">→</span>
+                    <span class="bg-slate-200 py-0.5 px-1.5 rounded-md">栃木</span>
+                    <span class="text-slate-400 font-bold">→</span>
+                    <span class="bg-slate-200 py-0.5 px-1.5 rounded-md">群馬</span>
+                    <span class="text-slate-400 font-bold">→</span>
+                    <span class="bg-slate-200 py-0.5 px-1.5 rounded-md">埼玉</span>
+                    <span class="text-slate-400 font-bold">→</span>
+                    <span class="font-bold bg-[#118AB2] text-white py-1 px-2 rounded-full">大阪</span>
+                </div>
+            </div>
+        </section>
+
+        <main class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <div class="bg-white p-4 rounded-lg shadow-md flex flex-col">
+                <h2 class="text-xl font-bold text-[#073B4C] mb-2">Day 1: 旅立ちと湘南の風</h2>
+                <p class="text-sm text-slate-600 mb-4">大阪を未明に出発し、静岡・山梨でスタンプをゲット。午後はドラマ「最後から二番目の恋」の舞台、江の島と鎌倉を巡る、感動のロケ地巡礼。旅の始まりにふさわしい、思い出深い一日です。このドーナツチャートは、初日の活動時間の内訳を示しています。</p>
+                <div class="chart-container mt-auto">
+                    <canvas id="day1Chart"></canvas>
+                </div>
+                <button id="day1TipBtn" class="mt-4 bg-[#118AB2] text-white py-2 px-4 rounded-lg hover:bg-[#073B4C] transition-colors duration-300 flex items-center justify-center">
+                    <span class="loading-spinner mr-2"></span>
+                    ✨ ロケ地巡礼のヒント ✨
+                </button>
+                <p id="day1TipOutput" class="text-sm text-slate-700 mt-2 hidden"></p>
+            </div>
+
+            <div class="bg-white p-4 rounded-lg shadow-md flex flex-col">
+                <h2 class="text-xl font-bold text-[#073B4C] mb-2">Day 2: 歴史と絶景を巡る</h2>
+                <p class="text-sm text-slate-600 mb-4">横浜から茨城の那珂湊おさかな市場へ。新鮮な海の幸を堪能した後は、栃木へ移動。大谷資料館の神秘的な空間と、世界遺産・日光東照宮の荘厳な建築美に触れる、文化的な一日。下のグラフは、各観光地での滞在時間を比較したものです。</p>
+                <div class="chart-container mt-auto">
+                    <canvas id="day2Chart"></canvas>
+                </div>
+                <button id="day2TipBtn" class="mt-4 bg-[#118AB2] text-white py-2 px-4 rounded-lg hover:bg-[#073B4C] transition-colors duration-300 flex items-center justify-center">
+                    <span class="loading-spinner mr-2"></span>
+                    ✨ 観光地の豆知識 ✨
+                </button>
+                <p id="day2TipOutput" class="text-sm text-slate-700 mt-2 hidden"></p>
+            </div>
+
+            <div class="bg-white p-4 rounded-lg shadow-md flex flex-col">
+                <h2 class="text-xl font-bold text-[#073B4C] mb-2">Day 3: 温泉とご当地グルメ</h2>
+                <p class="text-sm text-slate-600 mb-4">旅の疲れを癒しに、日本三名泉の一つ、草津温泉へ。湯畑を散策し、温泉情緒を満喫。埼玉でスタンプを押した後は、高崎へ。夜は名物のパスタや釜めしに舌鼓。このタイムラインで一日の流れを追ってみましょう。</p>
+                <div class="mt-auto space-y-2 pt-4">
+                    <div class="flex items-center">
+                        <span class="bg-[#EF476F] text-white text-xs font-bold w-20 text-center py-1.5 px-2 rounded-l-lg">11:00</span>
+                        <div class="border-l-4 border-[#EF476F] pl-3 flex-1">
+                            <p class="font-bold text-sm">草津温泉観光 ♨️</p>
+                            <p class="text-xs text-slate-500">湯畑散策と群馬県スタンプ獲得</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="bg-[#FFD166] text-white text-xs font-bold w-20 text-center py-1.5 px-2 rounded-l-lg">14:00</span>
+                        <div class="border-l-4 border-[#FFD166] pl-3 flex-1">
+                            <p class="font-bold text-sm">上里SA 📍</p>
+                            <p class="text-xs text-slate-500">埼玉県スタンプ獲得</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="bg-[#06D6A0] text-white text-xs font-bold w-20 text-center py-1.5 px-2 rounded-l-lg">16:00</span>
+                        <div class="border-l-4 border-[#06D6A0] pl-3 flex-1">
+                            <p class="font-bold text-sm">ホテルチェックイン 🏨</p>
+                            <p class="text-xs text-slate-500">ホテルルートイン高崎駅西口</p>
+                        </div>
+                    </div>
+                     <div class="flex items-center">
+                        <span class="bg-[#118AB2] text-white text-xs font-bold w-20 text-center py-1.5 px-2 rounded-l-lg">19:00</span>
+                        <div class="border-l-4 border-[#118AB2] pl-3 flex-1">
+                            <p class="font-bold text-sm">高崎グルメ 🍜</p>
+                            <p class="text-xs text-slate-500">名物パスタや釜めしを堪能</p>
+                        </div>
+                    </div>
+                </div>
+                <button id="day3TipBtn" class="mt-4 bg-[#118AB2] text-white py-2 px-4 rounded-lg hover:bg-[#073B4C] transition-colors duration-300 flex items-center justify-center">
+                    <span class="loading-spinner mr-2"></span>
+                    ✨ 草津＆高崎グルメのヒント ✨
+                </button>
+                <p id="day3TipOutput" class="text-sm text-slate-700 mt-2 hidden"></p>
+            </div>
+
+            <div class="bg-white p-4 rounded-lg shadow-md flex flex-col">
+                <h2 class="text-xl font-bold text-[#073B4C] mb-2">Day 4: 旅の終わりと全体像</h2>
+                <p class="text-sm text-slate-600 mb-4">楽しかった旅も最終日。高崎を出発し、長野経由で大阪へ。この4日間の冒険は、運転、観光、そして休息がバランス良く組み合わさった、充実した時間でした。この円グラフは、旅全体の時間の使い方をまとめたものです。</p>
+                <div class="chart-container mt-auto">
+                    <canvas id="totalTripChart"></canvas>
+                </div>
+            </div>
+
+        </main>
+
+        <footer class="text-center mt-8 py-4 border-t border-slate-200">
+            <p class="text-sm text-slate-500">素晴らしい旅の記録を、インフォグラフィックで振り返る。</p>
+        </footer>
+
+    </div>
+
+    <script>
+        const tooltipCallback = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                              return label.join(' ');
+                            } else {
+                              return label;
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        const day1ChartCtx = document.getElementById('day1Chart').getContext('2d');
+        new Chart(day1ChartCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['運転', '観光・食事', 'その他休憩'],
+                datasets: [{
+                    label: '活動時間 (h)',
+                    data: [6, 5, 2],
+                    backgroundColor: ['#118AB2', '#06D6A0', '#FFD166'],
+                    borderColor: '#ffffff',
+                    borderWidth: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    ...tooltipCallback.plugins,
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 10
+                            }
+                        }
+                    },
+                }
+            }
+        });
+
+        const day2ChartCtx = document.getElementById('day2Chart').getContext('2d');
+        new Chart(day2ChartCtx, {
+            type: 'bar',
+            data: {
+                labels: ['移動時間', '那珂湊市場', '大谷資料館', '日光東照宮'],
+                datasets: [{
+                    label: '滞在時間 (h)',
+                    data: [3.5, 2, 1.5, 1.5],
+                    backgroundColor: ['#118AB2', '#06D6A0', '#FFD166', '#EF476F'],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '時間 (h)',
+                            font: {
+                                size: 10
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 10
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                     ...tooltipCallback.plugins,
+                    legend: {
+                        display: false
+                    },
+                }
+            }
+        });
+
+        const totalTripChartCtx = document.getElementById('totalTripChart').getContext('2d');
+        new Chart(totalTripChartCtx, {
+            type: 'pie',
+            data: {
+                labels: ['運転', '観光', '食事・休憩', '睡眠'],
+                datasets: [{
+                    label: '総活動時間 (h)',
+                    data: [24, 10, 8, 24],
+                    backgroundColor: ['#118AB2', '#06D6A0', '#FFD166', '#EF476F'],
+                    borderColor: '#ffffff',
+                    borderWidth: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    ...tooltipCallback.plugins,
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 10
+                            }
+                        }
+                    },
+                }
+            }
+        });
+
+        // Gemini API integration
+        async function callGeminiAPI(prompt, outputElementId, buttonId) {
+            const outputElement = document.getElementById(outputElementId);
+            const button = document.getElementById(buttonId);
+            const spinner = button.querySelector('.loading-spinner');
+
+            outputElement.textContent = ''; // Clear previous output
+            outputElement.classList.add('hidden'); // Hide output initially
+            spinner.style.display = 'inline-block'; // Show spinner
+            button.disabled = true; // Disable button during call
+
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // If you want to use models other than gemini-2.5-flash-preview-05-20 or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            let retryCount = 0;
+            const maxRetries = 3;
+            const baseDelay = 1000; // 1 second
+
+            while (retryCount < maxRetries) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        if (response.status === 429 && retryCount < maxRetries - 1) {
+                            const delay = baseDelay * Math.pow(2, retryCount);
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                            retryCount++;
+                            continue; // Retry
+                        }
+                        throw new Error(`API request failed with status ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        outputElement.textContent = text;
+                        outputElement.classList.remove('hidden'); // Show output
+                    } else {
+                        outputElement.textContent = '情報が見つかりませんでした。';
+                        outputElement.classList.remove('hidden');
+                    }
+                    break; // Success, exit loop
+                } catch (error) {
+                    outputElement.textContent = `エラーが発生しました: ${error.message}`;
+                    outputElement.classList.remove('hidden');
+                    break; // Exit loop on error or max retries
+                } finally {
+                    spinner.style.display = 'none'; // Hide spinner
+                    button.disabled = false; // Enable button
+                }
+            }
+        }
+
+        document.getElementById('day1TipBtn').addEventListener('click', () => {
+            const prompt = `ドラマ「最後から二番目の恋」のロケ地である江の島と鎌倉を巡る旅行者に向けて、ロケ地巡礼をさらに楽しむための具体的なヒントを簡潔に教えてください。`;
+            callGeminiAPI(prompt, 'day1TipOutput', 'day1TipBtn');
+        });
+
+        document.getElementById('day2TipBtn').addEventListener('click', () => {
+            const prompt = `茨城県の那珂湊おさかな市場、栃木県の大谷資料館、日光東照宮を巡る旅行者に向けて、それぞれの観光地に関する興味深い豆知識や、訪れる際に役立つユニークな情報を簡潔に教えてください。`;
+            callGeminiAPI(prompt, 'day2TipOutput', 'day2TipBtn');
+        });
+
+        document.getElementById('day3TipBtn').addEventListener('click', () => {
+            const prompt = `群馬県の草津温泉と、高崎市の名物グルメ（パスタ、峠の釜めし、水沢うどん）を体験する旅行者に向けて、それぞれの魅力や楽しみ方、または選ぶ際のヒントを簡潔に教えてください。`;
+            callGeminiAPI(prompt, 'day3TipOutput', 'day3TipBtn');
+        });
+    </script>
+</body>
+</html>
